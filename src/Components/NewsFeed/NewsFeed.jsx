@@ -5,6 +5,7 @@ const NewsFeed = () => {
    return (
       <section className="max-w-[1000px] mx-auto border p-6">
          <div className="text-xl medium">News Feed</div>
+         <div>Add a post</div>
          <Tabs>
             <div className="max-w-[200px]">
                <TabList>
