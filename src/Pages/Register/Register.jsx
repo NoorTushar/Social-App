@@ -1,9 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { useState } from "react";
+import useAuth from "../../Hooks/useAuth";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import toast from "react-hot-toast";
+
+const image_hosting_key = import.meta.env.VITE_IMGBB_API_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const Register = () => {
+   const axiosPublic = useAxiosPublic();
    const [showPassword, setShowPassword] = useState(false);
    const {
       register,
@@ -13,8 +20,56 @@ const Register = () => {
       formState: { errors },
    } = useForm();
 
+   const { loginWithGoogle, createUser, updateUser, setLoading, logoutUser } =
+      useAuth();
+
+   // after registration correct redirection - (3)
+   const location = useLocation();
+
+   // after registration correct redirection - (4)
+   const navigate = useNavigate();
+
    const onSubmit = async (data) => {
-      console.log(data);
+      const imageFile = { image: data.image[0] };
+
+      const res = await axiosPublic.post(image_hosting_api, imageFile, {
+         headers: {
+            "content-type": "multipart/form-data",
+         },
+      });
+
+      if (res.data.success) {
+         const userData = {
+            ...data,
+            image: res.data.data.display_url,
+         };
+
+         console.log(userData);
+
+         // create user imported from AuthContext
+         try {
+            await createUser(data.email, data.password);
+            await updateUser(data.userName, res.data.data.display_url);
+            const finalResult = await axiosPublic.post("/users", userData);
+            console.log(finalResult.data);
+            // have to set loading to false else after
+            // redirecting to page, it will keep showing the loader
+            setLoading(false);
+            reset();
+            toast.success("LOGGED IN SUCCESSFULLY");
+
+            // navigate to private route or homepage
+            navigate(location?.state || "/");
+         } catch (error) {
+            console.log(error);
+            const errorMessage = error?.message
+               .split("Firebase: Error (auth/")[1]
+               .split(")")[0]
+               .replace(/-/g, " ");
+
+            toast.error(errorMessage?.toUpperCase());
+         }
+      }
    };
 
    return (
