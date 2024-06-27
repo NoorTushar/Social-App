@@ -5,6 +5,7 @@ import { useState } from "react";
 import useAuth from "../../Hooks/useAuth";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import toast from "react-hot-toast";
+import { ImSpinner9 } from "react-icons/im";
 
 const image_hosting_key = import.meta.env.VITE_IMGBB_API_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -12,6 +13,8 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const Register = () => {
    const axiosPublic = useAxiosPublic();
    const [showPassword, setShowPassword] = useState(false);
+   const [registrationLoading, setRegistrationLoading] = useState(false);
+
    const {
       register,
       handleSubmit,
@@ -20,8 +23,7 @@ const Register = () => {
       formState: { errors },
    } = useForm();
 
-   const { loginWithGoogle, createUser, updateUser, setLoading, logoutUser } =
-      useAuth();
+   const { createUser, updateUser, setLoading } = useAuth();
 
    // after registration correct redirection - (3)
    const location = useLocation();
@@ -30,6 +32,7 @@ const Register = () => {
    const navigate = useNavigate();
 
    const onSubmit = async (data) => {
+      setRegistrationLoading(true);
       const imageFile = { image: data.image[0] };
 
       const res = await axiosPublic.post(image_hosting_api, imageFile, {
@@ -41,7 +44,7 @@ const Register = () => {
       if (res.data.success) {
          const userData = {
             ...data,
-            image: res.data.data.display_url,
+            photoURL: res.data.data.display_url,
          };
 
          console.log(userData);
@@ -52,6 +55,7 @@ const Register = () => {
             await updateUser(data.userName, res.data.data.display_url);
             const finalResult = await axiosPublic.post("/users", userData);
             console.log(finalResult.data);
+            setRegistrationLoading(false);
             // have to set loading to false else after
             // redirecting to page, it will keep showing the loader
             setLoading(false);
@@ -250,9 +254,13 @@ const Register = () => {
                   <div>
                      <button
                         type="submit"
-                        className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-600 dark:text-gray-50"
+                        className={`w-full px-8 py-3 font-semibold rounded-md bg-violet-600 text-white text-center flex justify-center items-center`}
                      >
-                        Register
+                        {registrationLoading ? (
+                           <ImSpinner9 className="animate-spin" />
+                        ) : (
+                           "Register"
+                        )}
                      </button>
                   </div>
                   <p className="px-6 text-sm text-center dark:text-gray-600">

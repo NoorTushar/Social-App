@@ -1,20 +1,52 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { useState } from "react";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAuth from "../../Hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Login = () => {
+   const { loginUser, setLoading } = useAuth();
+   const axiosPublic = useAxiosPublic();
+   // first we will get the location of the current page
+   const location = useLocation();
+
+   // after login correct redirection (4)
+   const navigate = useNavigate();
+
+   // after login correct redirection (5)
+   // we want to send this path to the registration state props
+   const locationState = location.state;
+
    const [showPassword, setShowPassword] = useState(false);
    const {
       register,
       handleSubmit,
-      getValues,
       reset,
       formState: { errors },
    } = useForm();
 
    const onSubmit = async (data) => {
       console.log(data);
+
+      try {
+         const result = await loginUser(data.email, data.password);
+         console.log(result);
+         reset();
+
+         toast.success("LOGGED IN SUCCESSFULLY");
+
+         // after login correct redirection (6)
+         navigate(location?.state || "/");
+      } catch (error) {
+         const errorMessage = error.message
+            .split("Firebase: Error (auth/")[1]
+            .split(")")[0]
+            .replace(/-/g, " ");
+
+         toast.error(errorMessage?.toUpperCase());
+      }
    };
 
    return (
@@ -116,6 +148,7 @@ const Login = () => {
                   <p className="px-6 text-sm text-center dark:text-gray-600">
                      Don`t have an account?
                      <Link
+                        state={locationState}
                         to={"/register"}
                         className="hover:underline dark:text-violet-600"
                      >
