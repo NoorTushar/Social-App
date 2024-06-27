@@ -47,6 +47,7 @@ const Register = () => {
             photoURL: res.data.data.display_url,
          };
          delete userData.image;
+         delete userData.confirmPassword;
          console.log(userData);
 
          // create user imported from AuthContext
