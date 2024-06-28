@@ -9,11 +9,18 @@ import { FaRegComment, FaRegEdit } from "react-icons/fa";
 
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import EditModal from "./Modals/EditModal";
+import CommentModal from "./Modals/CommentModal";
+import CommentBox from "./CommentBox/CommentBox";
+import useAllUsers from "../Hooks/useAllUsers";
+import AllCommentsModal from "./Modals/AllCommentsModal";
 
 const PostCard = ({ post, refetch, user }) => {
    const axiosSecure = useAxiosSecure();
+   const [users] = useAllUsers();
    const [showDeleteModal, setShowDeleteModal] = useState(false);
    const [showEditModal, setShowEditModal] = useState(false);
+   const [showCommentModal, setShowCommentModal] = useState(false);
+   const [showAllComments, setShowAllComments] = useState(false);
 
    const alreadyLiked = post?.likes?.find(
       (like) => like.likedBy === user.email
@@ -63,31 +70,17 @@ const PostCard = ({ post, refetch, user }) => {
       setShowEditModal(false);
    };
 
-   const { mutateAsync: editPost } = useMutation({
-      mutationKey: ["post"],
-      mutationFn: async (id) => {
-         //  const result = await axiosSecure.delete(`/post/${id}`); change api
-         //  return result;
-      },
-      onSuccess: () => {
-         toast.success("The post has been deleted!");
-         handleCloseEditModal();
-         refetch();
-      },
-      onError: () => {
-         toast.error("Sorry, could not delete post!");
-         handleCloseEditModal();
-      },
-   });
+   // make a comment
+   const handleCloseCommentModal = () => {
+      setShowCommentModal(false);
+   };
 
-   const confirmEdit = async (id) => {
-      console.log(`id to edit: ${id}`);
-      //   await editPost(id);
-      handleCloseEditModal();
+   const getUserInfo = (email) => {
+      return users.find((user) => user.email === email);
    };
 
    return (
-      <div className="border flex flex-col max-w-xl mx-auto p-6 overflow-hidden rounded-lg shadow-md dark:bg-gray-50 dark:text-gray-800">
+      <div className="border flex flex-col max-w-xl mx-auto p-6 overflow-hidden rounded-lg shadow-md dark:bg-gray-50 dark:text-gray-800 my-6">
          <div className="flex space-x-4">
             <img
                alt=""
@@ -121,6 +114,7 @@ const PostCard = ({ post, refetch, user }) => {
             <div className="flex items-center space-x-2">
                {/* comments */}
                <button
+                  onClick={() => setShowCommentModal(true)}
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content="Comment"
                   type="button"
@@ -174,6 +168,26 @@ const PostCard = ({ post, refetch, user }) => {
                </div>
             )}
          </div>
+         <div>
+            {post?.comments?.length > 0 ? (
+               <div>
+                  {post.comments.slice(0, 2).map((comment, index) => {
+                     const user = getUserInfo(comment.commentBy);
+                     return (
+                        <CommentBox key={index} comment={comment} user={user} />
+                     );
+                  })}
+                  <div
+                     onClick={() => setShowAllComments(true)}
+                     className="btn btn-sm btn-primary bg-violet-600 text-white"
+                  >
+                     Show All Comments
+                  </div>
+               </div>
+            ) : (
+               <p className="shadow p-2">No comments yet</p>
+            )}
+         </div>
          <ConfirmDeleteModal
             id={post._id}
             showDeleteModal={showDeleteModal}
@@ -185,6 +199,21 @@ const PostCard = ({ post, refetch, user }) => {
             showEditModal={showEditModal}
             handleCloseEditModal={handleCloseEditModal}
             refetch={refetch}
+         />
+
+         <CommentModal
+            handleCloseCommentModal={handleCloseCommentModal}
+            showCommentModal={showCommentModal}
+            user={user}
+            post={post}
+            refetch={refetch}
+         />
+
+         <AllCommentsModal
+            getUserInfo={getUserInfo}
+            post={post}
+            showAllComments={showAllComments}
+            setShowAllComments={setShowAllComments}
          />
       </div>
    );

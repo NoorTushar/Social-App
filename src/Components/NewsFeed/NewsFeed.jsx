@@ -65,7 +65,7 @@ const NewsFeed = () => {
    return (
       <section className="max-w-[1000px] mx-auto border p-6">
          <div className="text-xl medium">News Feed</div>
-         <div className="border rounded-lg p-6 my-2 flex gap-4 flex-wrap bg-blue-200 w-full">
+         <div className="border rounded-lg p-6 my-2 flex gap-4 flex-wrap bg-gray-100 w-full">
             <img
                src={user?.photoURL}
                className="size-12 object-cover rounded-full"
@@ -127,30 +127,17 @@ const NewsFeed = () => {
                </div>
             </form>
          </div>
-         <Tabs>
-            <div className="max-w-[200px]">
-               <TabList>
-                  <Tab>All Posts</Tab>
-                  <Tab>Your Posts</Tab>
-               </TabList>
-            </div>
 
-            {/* All Posts Panel */}
-            <TabPanel className={"space-y-6"}>
-               {posts.map((post) => (
-                  <PostCard
-                     post={post}
-                     key={post._id}
-                     refetch={refetch}
-                     user={user}
-                  />
-               ))}
-            </TabPanel>
+         {/* All Posts Panel */}
 
-            <TabPanel>
-               <h2>Any content 2</h2>
-            </TabPanel>
-         </Tabs>
+         {posts.map((post) => (
+            <PostCard
+               post={post}
+               key={post._id}
+               refetch={refetch}
+               user={user}
+            />
+         ))}
       </section>
    );
 };
