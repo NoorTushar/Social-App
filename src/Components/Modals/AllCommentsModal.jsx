@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import { useEffect } from "react";
 
 const AllCommentsModal = ({
    post,
@@ -10,7 +11,7 @@ const AllCommentsModal = ({
 }) => {
    const axiosSecure = useAxiosSecure();
 
-   const { data: singlePost = {} } = useQuery({
+   const { data: singlePost = {}, refetch } = useQuery({
       queryKey: ["singlePost", post._id],
       enabled: !!post._id, // Ensures query is enabled when post._id is available
       queryFn: async () => {
@@ -18,6 +19,12 @@ const AllCommentsModal = ({
          return data;
       },
    });
+
+   useEffect(() => {
+      if (showAllComments) {
+         refetch();
+      }
+   }, [showAllComments, refetch]);
 
    return (
       showAllComments && (

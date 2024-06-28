@@ -63,7 +63,7 @@ const NewsFeed = () => {
 
    return (
       <section className="max-w-[1000px] mx-auto border p-6 pt-[80px]">
-         <div className="text-xl medium">News Feed</div>
+         <div className="text-2xl font-medium text-purple-700">News Feed</div>
          <div className="border rounded-lg p-6 my-2 flex gap-4 flex-wrap bg-gray-100 w-full">
             <img
                src={user?.photoURL}
