@@ -184,6 +184,7 @@ const PostCard = ({ post, refetch, user }) => {
             post={post}
             showEditModal={showEditModal}
             handleCloseEditModal={handleCloseEditModal}
+            refetch={refetch}
          />
       </div>
    );
