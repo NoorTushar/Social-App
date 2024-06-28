@@ -117,7 +117,10 @@ const NewsFeed = () => {
                      <button className="btn btn-sm" type="reset">
                         Reset
                      </button>
-                     <button className="btn btn-primary btn-sm" type="submit">
+                     <button
+                        className="btn btn-primary bg-violet-600 text-white btn-sm"
+                        type="submit"
+                     >
                         Post
                      </button>
                   </div>

@@ -3,6 +3,9 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+
 import { RouterProvider } from "react-router-dom";
 import { router } from "./Routes/Routes";
 import AuthProvider from "./Providers/AuthProvider";
@@ -17,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
          <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
             <Toaster />
+            <Tooltip id="my-tooltip" />
          </QueryClientProvider>
       </AuthProvider>
    </React.StrictMode>
