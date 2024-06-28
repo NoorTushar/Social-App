@@ -8,15 +8,17 @@ import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaRegComment, FaRegEdit } from "react-icons/fa";
 
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import EditModal from "./Modals/EditModal";
 
 const PostCard = ({ post, refetch, user }) => {
    const axiosSecure = useAxiosSecure();
    const [showDeleteModal, setShowDeleteModal] = useState(false);
+   const [showEditModal, setShowEditModal] = useState(false);
 
    const alreadyLiked = post?.likes?.find(
       (like) => like.likedBy === user.email
    );
-   console.log(alreadyLiked);
+
    // delete a post
    const { mutateAsync: deletePost } = useMutation({
       mutationKey: ["post"],
@@ -45,6 +47,7 @@ const PostCard = ({ post, refetch, user }) => {
       handleCloseDeleteModal();
    };
 
+   // like a post / unlike a post
    const handleLike = async (id) => {
       const likeData = {
          likedBy: user?.email,
@@ -53,6 +56,34 @@ const PostCard = ({ post, refetch, user }) => {
       const { data } = await axiosSecure.patch(`/posts/like/${id}`, likeData);
       console.log(data);
       refetch();
+   };
+
+   // edit a post
+   const handleCloseEditModal = () => {
+      setShowEditModal(false);
+   };
+
+   const { mutateAsync: editPost } = useMutation({
+      mutationKey: ["post"],
+      mutationFn: async (id) => {
+         //  const result = await axiosSecure.delete(`/post/${id}`); change api
+         //  return result;
+      },
+      onSuccess: () => {
+         toast.success("The post has been deleted!");
+         handleCloseEditModal();
+         refetch();
+      },
+      onError: () => {
+         toast.error("Sorry, could not delete post!");
+         handleCloseEditModal();
+      },
+   });
+
+   const confirmEdit = async (id) => {
+      console.log(`id to edit: ${id}`);
+      //   await editPost(id);
+      handleCloseEditModal();
    };
 
    return (
@@ -128,6 +159,7 @@ const PostCard = ({ post, refetch, user }) => {
                   <button
                      data-tooltip-id="my-tooltip"
                      data-tooltip-content="Edit post"
+                     onClick={() => setShowEditModal(true)}
                   >
                      <FaRegEdit className="text-violet-600 text-xl " />
                   </button>
@@ -147,6 +179,11 @@ const PostCard = ({ post, refetch, user }) => {
             showDeleteModal={showDeleteModal}
             handleCloseDeleteModal={handleCloseDeleteModal}
             confirmDelete={confirmDelete}
+         />
+         <EditModal
+            post={post}
+            showEditModal={showEditModal}
+            handleCloseEditModal={handleCloseEditModal}
          />
       </div>
    );
