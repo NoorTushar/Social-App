@@ -2,13 +2,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { useState } from "react";
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import useAuth from "../../Hooks/useAuth";
 import toast from "react-hot-toast";
+import ResetPasswordModal from "../../Components/Modals/ResetPasswordModal";
 
 const Login = () => {
-   const { loginUser, setLoading } = useAuth();
-   const axiosPublic = useAxiosPublic();
+   const { loginUser, setLoading, resetPassword } = useAuth();
+   const [openResetModal, setOpenResetModal] = useState(false);
+
    // first we will get the location of the current page
    const location = useLocation();
 
@@ -74,6 +75,7 @@ const Login = () => {
                               message: "Must provide a valid email address",
                            },
                         })}
+                        // ref={emailRef}
                         type="email"
                         name="email"
                         placeholder="Enter your email address here"
@@ -158,6 +160,17 @@ const Login = () => {
                   </p>
                </div>
             </form>
+            <button
+               onClick={() => setOpenResetModal(true)}
+               className="text-center text-sm text-purple-600"
+            >
+               Forgot Password?
+            </button>
+            <ResetPasswordModal
+               openResetModal={openResetModal}
+               setOpenResetModal={setOpenResetModal}
+               resetPassword={resetPassword}
+            />
          </div>
       </div>
    );
