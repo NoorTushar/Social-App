@@ -11,7 +11,7 @@ const CommentBox = ({ comment, user }) => {
             <div>
                <div>
                   <h4 className="font-medium">{user?.userName}</h4>
-                  <span className="text-sm">
+                  <span className="text-xs">
                      {new Date(comment?.commentTime).toLocaleString()}
                   </span>
                </div>

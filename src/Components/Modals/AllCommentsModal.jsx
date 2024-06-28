@@ -23,6 +23,14 @@ const AllCommentsModal = ({
       showAllComments && (
          <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center bg-black bg-opacity-20 z-10">
             <div className="max-w-lg w-full mx-auto bg-white shadow-lg rounded-xl p-6">
+               <div className="text-end">
+                  <button
+                     onClick={() => setShowAllComments(false)}
+                     className="btn btn-sm btn-primary bg-violet-600 text-white mt-4"
+                  >
+                     Close
+                  </button>
+               </div>
                <h3 className="text-center text-xl font-semibold text-violet-600 mb-4">
                   All Comments
                </h3>
