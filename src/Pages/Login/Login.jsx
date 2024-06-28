@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import ResetPasswordModal from "../../Components/Modals/ResetPasswordModal";
 
 const Login = () => {
-   const { loginUser, setLoading, resetPassword } = useAuth();
+   const { loginUser, resetPassword } = useAuth();
    const [openResetModal, setOpenResetModal] = useState(false);
 
    // first we will get the location of the current page
@@ -51,7 +51,7 @@ const Login = () => {
    };
 
    return (
-      <div className="min-h-screen justify-center items-center flex">
+      <div className="min-h-screen justify-center items-center flex pt-[68px]">
          <div className="flex flex-col w-full max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-50 dark:text-gray-800 shadow">
             <div className="mb-8 text-center">
                <h1 className="my-3 text-3xl font-bold">Login</h1>

@@ -88,13 +88,9 @@ const PostCard = ({ post, refetch, user }) => {
                className="object-cover w-12 h-12 rounded-full shadow dark:bg-gray-500"
             />
             <div className="flex flex-col space-y-1">
-               <a
-                  rel="noopener noreferrer"
-                  href="#"
-                  className="text-sm font-semibold"
-               >
+               <h3 className="text-lg font-semibold text-violet-600">
                   {post.postedBy.userName}
-               </a>
+               </h3>
                <span className="text-xs dark:text-gray-600">
                   {new Date(post.postTime).toLocaleDateString()}
                </span>

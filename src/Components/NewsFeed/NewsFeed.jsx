@@ -1,4 +1,3 @@
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import useAllPosts from "../../Hooks/useAllPosts";
 import PostCard from "../PostCard";
@@ -63,7 +62,7 @@ const NewsFeed = () => {
    };
 
    return (
-      <section className="max-w-[1000px] mx-auto border p-6">
+      <section className="max-w-[1000px] mx-auto border p-6 pt-[80px]">
          <div className="text-xl medium">News Feed</div>
          <div className="border rounded-lg p-6 my-2 flex gap-4 flex-wrap bg-gray-100 w-full">
             <img
@@ -73,7 +72,7 @@ const NewsFeed = () => {
             />
             <form
                onSubmit={handleSubmit(onSubmit)}
-               className="flex-1 flex flex-col"
+               className="flex-1 flex flex-col w-full"
             >
                <div className="w-full">
                   <textarea
@@ -94,7 +93,7 @@ const NewsFeed = () => {
                   )}
                </div>
 
-               <div className="flex items-center space-x-2">
+               <div className="flex items-center space-x-2 my-2">
                   <label>Image: </label>
                   <input
                      type="file"
@@ -114,7 +113,10 @@ const NewsFeed = () => {
 
                <div className="text-end mt-2 gap-2 flex items-center justify-between  flex-wrap">
                   <div className="space-x-2">
-                     <button className="btn btn-sm" type="reset">
+                     <button
+                        className="btn btn-sm bg-slate-400 text-white"
+                        type="reset"
+                     >
                         Reset
                      </button>
                      <button
