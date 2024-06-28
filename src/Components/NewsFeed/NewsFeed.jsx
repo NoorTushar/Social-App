@@ -62,7 +62,6 @@ const NewsFeed = () => {
       }
    };
 
-   console.log(posts);
    return (
       <section className="max-w-[1000px] mx-auto border p-6">
          <div className="text-xl medium">News Feed</div>
@@ -136,7 +135,12 @@ const NewsFeed = () => {
             {/* All Posts Panel */}
             <TabPanel className={"space-y-6"}>
                {posts.map((post) => (
-                  <PostCard post={post} key={post._id} refetch={refetch} />
+                  <PostCard
+                     post={post}
+                     key={post._id}
+                     refetch={refetch}
+                     user={user}
+                  />
                ))}
             </TabPanel>
 
